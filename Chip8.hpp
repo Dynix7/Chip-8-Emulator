@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <array>
+#include <string>
 
 class Chip8 {
     private:
@@ -17,8 +18,18 @@ class Chip8 {
         std::uint8_t soundTimer = 0;
 
         std::array<std::uint32_t, 64 *32> video{};
-        std::uint16_t keypad = 0;
+        std::array<bool, 16> keypad{};
+
+        void loadFont();
+
+        void runOpcode();
     public:
+
         Chip();
+        void loadProgram(const std::string &fileName);
+
+        void cycle();
+        
+
 
 }
