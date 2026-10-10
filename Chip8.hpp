@@ -20,13 +20,13 @@ class Chip8 {
         std::array<std::uint32_t, 64 *32> video{};
         std::array<bool, 16> keypad{};
 
-        void loadFont();
-
+        bool loadFont();
         void runOpcode();
+
     public:
 
         Chip();
-        void loadProgram(const std::string &fileName);
+        bool loadProgram(const std::string &romName);
 
         void cycle();
         
