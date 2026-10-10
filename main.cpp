@@ -1,6 +1,6 @@
 #include <cstdlib.h>
 #include <cstdio.h>
-#include <Chip.hpp>
+#include <Chip8.hpp>
 
 int main(int argc, char * argv[]) {
 
