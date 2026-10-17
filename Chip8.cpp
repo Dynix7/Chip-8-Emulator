@@ -6,6 +6,9 @@
 #include <fstream>
 #include <string>
 
+Chip8::Chip8() {
+    std::cout << "w chip?";
+}
 
 bool Chip8::loadFont() {
     constexpr std::size_t fontStart = 0x50; // cuz standard is to start font from 0x50

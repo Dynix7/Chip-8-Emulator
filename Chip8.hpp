@@ -25,11 +25,10 @@ class Chip8 {
 
     public:
 
-        Chip();
+        Chip8();
         bool loadProgram(const std::string &romName);
-
         void cycle();
         
 
 
-}
+};
