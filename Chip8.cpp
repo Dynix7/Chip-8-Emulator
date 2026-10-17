@@ -5,8 +5,6 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include <stdexcept>
-#include <cstdio>
 
 
 bool Chip8::loadFont() {
@@ -33,6 +31,16 @@ bool Chip8::loadFont() {
     std::copy(fontData.begin(), fontData.end(), memory.begin() + fontStart);
     return true;
 }
+
+
+void Chip8::runOpcode() {
+    opcode = static_cast<std::uint16_t>(memory[pc] << 8) | static_cast<std::uint16_t>(memory[pc+1]); // Reads opcode
+    pc += 2; //increments the program counter by 2 since it reads 16 bits per opcodes
+
+    std::uint16_t
+}
+
+
 
 bool Chip8::loadProgram(const std::string &romName) {
     constexpr std::size_t romStart = 0x200;

@@ -5,9 +5,9 @@
 
 class Chip8 {
     private:
-        std::array<std::uint8_t, 4096> memory{}; //font + program
-        std::array<std::uint8_t, 16> registers{}; //V0 to VF
-        std::array<std::uint16_t, 16> stack{}; //return address stack
+        std::array<std::uint8_t, 4096> memory = {}; //font + program
+        std::array<std::uint8_t, 16> registers = {}; //V0 to VF
+        std::array<std::uint16_t, 16> stack = {}; //return address stack
 
         std::uint16_t i = 0; //holds memory address for operations
         std::uint16_t pc = 0x200; //program counter
@@ -17,8 +17,8 @@ class Chip8 {
         std::uint8_t delayTimer = 0;
         std::uint8_t soundTimer = 0;
 
-        std::array<std::uint32_t, 64 *32> video{};
-        std::array<bool, 16> keypad{};
+        std::array<std::uint32_t, 64 *32> video = {};
+        std::array<bool, 16> keypad = {};
 
         bool loadFont();
         void runOpcode();
