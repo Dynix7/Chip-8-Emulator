@@ -32,7 +32,8 @@ bool Chip8::loadFont() {
     return true;
 }
 
-
+//http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1
+// opcode description from here
 void Chip8::runOpcode() {
     opcode = static_cast<std::uint16_t>(memory[pc] << 8) | static_cast<std::uint16_t>(memory[pc+1]); // Reads opcode
     pc += 2; //increments the program counter by 2 since it reads 16 bits per opcodes
@@ -41,25 +42,97 @@ void Chip8::runOpcode() {
     std::uint8_t NN = opcode & 0x00FF;
     std::uint8_t N = opcode & 0x000F;
     
-    std::uint8_t X = opcode & 0x0F00;
-    std::uint8_t Y = opcode & 0x00F0;
+    std::uint8_t x = opcode & 0x0F00;
+    std::uint8_t y = opcode & 0x00F0;
 
     switch (opcode & 0xF000) {
         case 0x0000:
-            if (opcode == 0x00E0) {
+            if (opcode == 0x00E0) { // Clears Display
                 video.fill(0);
             } else if (opcode == 0x00EE) {
-                pc = stack[--sp];
+                pc = stack[--sp]; //Return from a subroutine
             }
             break;
 
         case 0x1000:
-            pc = NNN;
+            pc = NNN; //Jump to location nnn.
             break;
 
         case 0x2000:
-            stack[++sp] = pc
+            stack[++sp] = pc //Call subroutine at nnn.
             pc = NNN;
+            break;
+
+        case 0x3000:
+            if (V[x] == NN) { //Skip next instruction if Vx = kk.
+                pc += 2;
+            }
+            break;
+        
+        case 0x4000:
+            if (V[x] != NN) { //Skip next instruction if Vx != kk.
+                pc += 2;
+            }
+            break;
+        
+        case 0x5000:
+            if (V[x] == V[y]) { //Skip next instruction if Vx = Vy.
+                pc += 2;
+            }
+            break;
+        
+        case 0x6000:
+            V[x] = NN; //Set Vx = kk.
+            break;
+        
+        case 0x7000: 
+            V[x] += NN; //Set Vx = Vx + kk.
+            break;
+        
+        case 0x8000:
+            switch (N) {
+                case 0x0000:
+                    V[x] = V[y]; //Set Vx = Vy.
+                    break;
+                
+                case 0x0001:
+                    V[x] = V[x] | V[y]; //Set Vx = Vx OR Vy.
+                    break;
+                
+                case 0x0002:
+                    V[x] = V[x] & V[y]; //Set Vx = Vx AND Vy.
+                    break;
+                
+                case 0x0003:
+                    V[x] = V[x] ^ V[y]; //Set Vx = Vx XOR Vy.
+                    break;
+                
+                case 0x0004:
+                    std::uint16_t sum = V[x] + V[y]; //Set Vx = Vx + Vy, set VF = carry.
+                    V[0xF] = (sum > 0xFF);
+                    V[x] = static_cast<std::uint8_t>(sum);
+                    break;
+                
+                case 0x0005:
+                    V[0xF] = (V[x] > V[y]); //Set Vx = Vx - Vy, set VF = NOT borrow.
+                    V[x] -= V[y];
+                    break;
+                
+                case 0x0006:
+                    V[0xF] = (V[x] == 0x1); //Set Vx = Vx SHR 1.
+                    V[x] >>= 1;
+                    break;
+                
+                case 0x0007:
+                    V[0xF] = (V[y] > V[x]); //Set Vx = Vy - Vx, set VF = NOT borrow.
+                    V[x] = V[y] - V[x];
+                    break;
+                
+                case 0x000E:
+                    V[0xF] = (V[x] & 0x1); //Set Vx = Vx SHL 1.
+                    V[x] <<= 1;
+                    break;
+            }
             break;
     }
 }
