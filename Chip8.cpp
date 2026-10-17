@@ -37,7 +37,31 @@ void Chip8::runOpcode() {
     opcode = static_cast<std::uint16_t>(memory[pc] << 8) | static_cast<std::uint16_t>(memory[pc+1]); // Reads opcode
     pc += 2; //increments the program counter by 2 since it reads 16 bits per opcodes
 
-    std::uint16_t
+    std::uint16_t NNN = opcode & 0x0FFF;
+    std::uint8_t NN = opcode & 0x00FF;
+    std::uint8_t N = opcode & 0x000F;
+    
+    std::uint8_t X = opcode & 0x0F00;
+    std::uint8_t Y = opcode & 0x00F0;
+
+    switch (opcode & 0xF000) {
+        case 0x0000:
+            if (opcode == 0x00E0) {
+                video.fill(0);
+            } else if (opcode == 0x00EE) {
+                pc = stack[--sp];
+            }
+            break;
+
+        case 0x1000:
+            pc = NNN;
+            break;
+
+        case 0x2000:
+            stack[++sp] = pc
+            pc = NNN;
+            break;
+    }
 }
 
 
