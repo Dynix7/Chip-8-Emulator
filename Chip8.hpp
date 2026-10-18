@@ -31,7 +31,4 @@ class Chip8 {
 
         const std::array<std::uint32_t, 64 * 32>& framebuffer();
         
-        
-
-
 };

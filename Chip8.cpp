@@ -8,7 +8,8 @@
 #include <iostream>
 
 Chip8::Chip8() {
-    std::cout << "chip made";
+    std::cout << "chip made" << '\n';
+    //video.fill(0xFFFFFFFF);
 }
 
 bool Chip8::loadFont() {
@@ -138,6 +139,24 @@ void Chip8::runOpcode() {
                     V[x] <<= 1;
                     break;
             }
+            break;
+        
+        case 0x9000:
+            if (V[x] != V[y]) { //Skip next instruction if Vx != Vy.
+                pc += 2;
+            }
+            break;
+
+        case 0xA000:
+            i = NNN; //Set I = nnn.
+            break;
+        
+        case 0xB000:
+            pc = NNN + V[0]; //Jump to location nnn + V0.
+            break;
+        
+        case 0xC000: // REMINDER: IMPLEMENT GETTING THE RANDOM BYTE
+            V[x] = 67 & NN; // Set Vx = random byte AND kk
             break;
     }
 }
