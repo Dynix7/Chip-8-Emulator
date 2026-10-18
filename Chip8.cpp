@@ -169,8 +169,11 @@ void Chip8::runOpcode() {
             break;
         
         case 0xD000: {
-            std::uint8_t xPos = V[x] % 64;
-            std::uint8_t yPos = V[y] % 32;
+            constexpr int VIDEO_WIDTH = 64;
+            constexpr int VIDEO_HEIGHT = 32;
+
+            std::uint8_t xPos = V[x] % VIDEO_WIDTH;
+            std::uint8_t yPos = V[y] % VIDEO_HEIGHT;
             std::uint8_t height = N;
 
             V[0xF] = 0;
