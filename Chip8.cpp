@@ -6,9 +6,13 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <format>
 
 Chip8::Chip8() {
     std::cout << "chip made" << '\n';
+    if (loadFont()) {
+        std::cout << "Font Loaded" << '\n';
+    }
     //video.fill(0xFFFFFFFF);
 }
 
@@ -37,6 +41,10 @@ bool Chip8::loadFont() {
     return true;
 }
 
+void Chip8::cycle() {
+    runOpcode();
+}
+
 //http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1
 // opcode description from here
 void Chip8::runOpcode() {
@@ -50,6 +58,7 @@ void Chip8::runOpcode() {
     std::uint8_t x = opcode & 0x0F00;
     std::uint8_t y = opcode & 0x00F0;
 
+    std::cout << std::format("{:04x}", opcode) << '\n';
     switch (opcode & 0xF000) {
         case 0x0000:
             if (opcode == 0x00E0) { // Clears Display
@@ -157,6 +166,10 @@ void Chip8::runOpcode() {
         
         case 0xC000: // REMINDER: IMPLEMENT GETTING THE RANDOM BYTE
             V[x] = 67 & NN; // Set Vx = random byte AND kk
+            break;
+        
+        default:
+            std::cout << "Unknown Opcode" << '\n';
             break;
     }
 }

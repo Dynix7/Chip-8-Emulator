@@ -48,6 +48,12 @@ int main(int argc, char * argv[]) {
         std::cerr << "Error Creating Texture" << '\n';
     }
 
+    if (chip8.loadProgram("IBMLogo.ch8")) {
+        std::cout << "Program Loaded" << '\n';
+    } else {
+        std::cerr << "Error Loading Program" << '\n';
+    }
+
     while (ChipVideo.running) {
         processInputs();
 
@@ -55,6 +61,9 @@ int main(int argc, char * argv[]) {
         SDL_UpdateTexture(ChipVideo.texture, nullptr, chip8.framebuffer().data(), sizeof(chip8.framebuffer()[0]) * ChipVideo.VIDEO_WIDTH);
         SDL_RenderTexture(ChipVideo.renderer, ChipVideo.texture, nullptr, nullptr);
         SDL_RenderPresent(ChipVideo.renderer);
+
+        chip8.cycle();
+        SDL_Delay(1);
     }
 
     cleanupSDL();
