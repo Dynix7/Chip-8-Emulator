@@ -194,7 +194,20 @@ void Chip8::runOpcode() {
             }
             break;
         }
-
+        case 0xE000:
+            if (N == 0x000E) {
+                if (keypad[V[x]]) {
+                    pc += 2;
+                }
+            } else if (B = 0x0001) {
+                if (!keypad[V[x]]) {
+                    pc += 2;
+                }
+            }
+            break;
+        
+        //case 0xF000:
+            //switch (NN)
         default:
             std::cout << "Unknown Opcode" << '\n';
             break;

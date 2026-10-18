@@ -48,6 +48,8 @@ int main(int argc, char * argv[]) {
         std::cerr << "Error Creating Texture" << '\n';
     }
 
+    SDL_SetTextureScaleMode(ChipVideo.texture, SDL_SCALEMODE_NEAREST); // Change sampling mode for the texture for clear pixels
+
     if (chip8.loadProgram("IBMLogo.ch8")) {
         std::cout << "Program Loaded" << '\n';
     } else {
