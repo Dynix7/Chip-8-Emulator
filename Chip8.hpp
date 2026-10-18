@@ -3,6 +3,8 @@
 #include <array>
 #include <string>
 
+
+
 class Chip8 {
     private:
         std::array<std::uint8_t, 4096> memory = {}; //font + program

@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
         SDL_RenderPresent(ChipVideo.renderer);
 
         chip8.cycle();
-        SDL_Delay(1);
+        SDL_Delay(100);
     }
 
     cleanupSDL();

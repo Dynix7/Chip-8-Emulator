@@ -58,7 +58,7 @@ void Chip8::runOpcode() {
     std::uint8_t x = opcode & 0x0F00;
     std::uint8_t y = opcode & 0x00F0;
 
-    std::cout << std::format("{:04x}", opcode) << '\n';
+    std::cout << std::format("Opcode: {:04x}\n", opcode);
     switch (opcode & 0xF000) {
         case 0x0000:
             if (opcode == 0x00E0) { // Clears Display
@@ -168,6 +168,30 @@ void Chip8::runOpcode() {
             V[x] = 67 & NN; // Set Vx = random byte AND kk
             break;
         
+        case 0xD000: {
+            std::uint8_t xPos = V[x] % 64;
+            std::uint8_t yPos = V[y] % 32;
+            std::uint8_t height = N;
+
+            V[0xF] = 0;
+            for (int row = 0; row < height; ++row) {
+                std::uint8_t spriteRow = memory[i + row];
+
+                for (int column = 0; column < 8; ++column) {
+                    std::uint8_t pixel = spriteRow & (0x8 >> column); //Bit mask per column
+                    std::uint32_t& screenLoc = video[(yPos + row)*64 + (xPos + column)];
+
+                    if (pixel) {
+                        if (screenLoc == 0xFFFFFFFF) {
+                            V[0xF] = 1;
+                        }
+                        screenLoc ^= 0xFFFFFFFF;
+                    }
+                }
+            }
+            break;
+        }
+
         default:
             std::cout << "Unknown Opcode" << '\n';
             break;
