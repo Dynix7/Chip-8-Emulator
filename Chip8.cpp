@@ -178,7 +178,7 @@ void Chip8::runOpcode() {
                 std::uint8_t spriteRow = memory[i + row];
 
                 for (int column = 0; column < 8; ++column) {
-                    std::uint8_t pixel = spriteRow & (0x8 >> column); //Bit mask per column
+                    std::uint8_t pixel = spriteRow & (0x80 >> column); //Bit mask per column
                     std::uint32_t& screenLoc = video[(yPos + row)*64 + (xPos + column)];
 
                     if (pixel) {
