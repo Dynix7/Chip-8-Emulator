@@ -199,7 +199,7 @@ void Chip8::runOpcode() {
                 if (keypad[V[x]]) {
                     pc += 2;
                 }
-            } else if (B = 0x0001) {
+            } else if (N = 0x0001) {
                 if (!keypad[V[x]]) {
                     pc += 2;
                 }
