@@ -1,13 +1,14 @@
-#include <Chip8.hpp>
+#include "Chip8.hpp"
 #include <cstdint>
 #include <algorithm>
 #include <array>
 #include <vector>
 #include <fstream>
 #include <string>
+#include <iostream>
 
 Chip8::Chip8() {
-    std::cout << "w chip?";
+    std::cout << "chip made";
 }
 
 bool Chip8::loadFont() {
@@ -62,7 +63,7 @@ void Chip8::runOpcode() {
             break;
 
         case 0x2000:
-            stack[++sp] = pc //Call subroutine at nnn.
+            stack[++sp] = pc; //Call subroutine at nnn.
             pc = NNN;
             break;
 
@@ -110,12 +111,13 @@ void Chip8::runOpcode() {
                     V[x] = V[x] ^ V[y]; //Set Vx = Vx XOR Vy.
                     break;
                 
-                case 0x0004:
+                case 0x0004: {
                     std::uint16_t sum = V[x] + V[y]; //Set Vx = Vx + Vy, set VF = carry.
                     V[0xF] = (sum > 0xFF);
                     V[x] = static_cast<std::uint8_t>(sum);
                     break;
-                
+                }
+
                 case 0x0005:
                     V[0xF] = (V[x] > V[y]); //Set Vx = Vx - Vy, set VF = NOT borrow.
                     V[x] -= V[y];
@@ -181,3 +183,6 @@ bool Chip8::loadProgram(const std::string &romName) {
     return true;
 }
 
+const std::array<std::uint32_t, 64 * 32>& Chip8::framebuffer() {
+    return video;
+}

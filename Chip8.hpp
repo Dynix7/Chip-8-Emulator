@@ -17,7 +17,7 @@ class Chip8 {
         std::uint8_t delayTimer = 0;
         std::uint8_t soundTimer = 0;
 
-        std::array<std::uint32_t, 64 *32> video = {};
+        std::array<std::uint32_t, 64 * 32> video = {};
         std::array<bool, 16> keypad = {};
 
         bool loadFont();
@@ -28,6 +28,9 @@ class Chip8 {
         Chip8();
         bool loadProgram(const std::string &romName);
         void cycle();
+
+        const std::array<std::uint32_t, 64 * 32>& framebuffer();
+        
         
 
 
