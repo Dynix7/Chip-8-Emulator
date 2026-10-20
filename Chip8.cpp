@@ -55,8 +55,8 @@ void Chip8::runOpcode() {
     std::uint8_t NN = opcode & 0x00FF;
     std::uint8_t N = opcode & 0x000F;
     
-    std::uint8_t x = opcode & 0x0F00;
-    std::uint8_t y = opcode & 0x00F0;
+    std::uint8_t x = (opcode >> 8) & 0x0F;
+    std::uint8_t y = (opcode >> 4) & 0x0F;
 
     std::cout << std::format("Opcode: {:04x}\n", opcode);
     switch (opcode & 0xF000) {
@@ -217,6 +217,8 @@ void Chip8::runOpcode() {
 
 
 bool Chip8::loadProgram(const std::string &romName) {
+    pc = 0x200;
+
     constexpr std::size_t romStart = 0x200;
     constexpr std::streamoff maxRomSize = 4096 - 0x200;
     std::ifstream file(romName, std::ios::binary);
