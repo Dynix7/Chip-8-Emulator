@@ -49,6 +49,7 @@ void Chip8::cycle() {
 //http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1
 // opcode description from here
 void Chip8::runOpcode() {
+    
     opcode = static_cast<std::uint16_t>(memory[pc] << 8) | static_cast<std::uint16_t>(memory[pc+1]); // Reads opcode
     if (pc + 2 < static_cast<int>(memory.size())) {
             pc += 2; //increments the program counter by 2 since it reads 16 bits per opcodes
@@ -218,7 +219,7 @@ void Chip8::runOpcode() {
                 case 0x0A: {
                     bool keyPressed = false;
 
-                    for (size_t j = 0; i < keypad.size(); ++j) {
+                    for (size_t j = 0; j < keypad.size(); ++j) {
                         if (keypad[j]) {
                             V[x] = j;
                             keyPressed = true;
@@ -258,13 +259,13 @@ void Chip8::runOpcode() {
                 }
                 
                 case 0x55: 
-                    for (std::uint8_t j = 0; j < x; ++j) {
+                    for (std::uint8_t j = 0; j <= x; ++j) {
                         memory[i + j] = V[x];
                     }
                     break;
                 
                 case 0x65:
-                    for (std::uint8_t j = 0; j < x; ++j) {
+                    for (std::uint8_t j = 0; j <= x; ++j) {
                         V[x] = memory[i + j];
                     }
                     break;                   
