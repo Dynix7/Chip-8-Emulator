@@ -263,8 +263,15 @@ void Chip8::runOpcode() {
                     }
                     break;
                 
-                    
+                case 0x65:
+                    for (std::uint8_t j = 0; j < x; ++j) {
+                        V[x] = memory[i + j];
+                    }
+                    break;                   
+                  
             }
+            break;
+            
         default:
             std::cout << "Unknown Opcode" << '\n';
             break;
