@@ -85,15 +85,16 @@ void processInputs() {
 }
 
 void cleanupSDL() {
-    SDL_DestroyWindow(ChipVideo.window);
-    ChipVideo.window = nullptr;
-
-    SDL_DestroyRenderer(ChipVideo.renderer);
-    ChipVideo.renderer = nullptr;
 
     SDL_DestroyTexture(ChipVideo.texture);
     ChipVideo.texture = nullptr;
 
+    SDL_DestroyRenderer(ChipVideo.renderer);
+    ChipVideo.renderer = nullptr;
+
+    SDL_DestroyWindow(ChipVideo.window);
+    ChipVideo.window = nullptr;
+    
     SDL_Quit();
 
     std::cout << "Cleaned Up SDL" << '\n';

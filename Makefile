@@ -1,5 +1,5 @@
 CFLAGS = -Wall -Wextra -pedantic -g
-LDFLAGS = -Og -fsanitize=address,undefined -D_GLIBCXX_DEBUG
+LDFLAGS = -Og -fsanitize=address,undefined -D_GLIBCXX_DEBUG -fno-omit-frame-pointer
 LIBS = -lSDL3
 
 Chip8: main.cpp Chip8.cpp Chip8.hpp

@@ -8,6 +8,8 @@
 #include <iostream>
 #include <format>
 
+#define FONT_START_ADDR 0x50 // cuz standard is to start font from 0x50
+
 Chip8::Chip8() {
     std::cout << "chip made" << '\n';
     if (loadFont()) {
@@ -17,7 +19,6 @@ Chip8::Chip8() {
 }
 
 bool Chip8::loadFont() {
-    constexpr std::size_t fontStart = 0x50; // cuz standard is to start font from 0x50
     constexpr std::array<std::uint8_t, 80> fontData = {	
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
     0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -37,7 +38,7 @@ bool Chip8::loadFont() {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
 
-    std::copy(fontData.begin(), fontData.end(), memory.begin() + fontStart);
+    std::copy(fontData.begin(), fontData.end(), memory.begin() + FONT_START_ADDR);
     return true;
 }
 
@@ -49,7 +50,9 @@ void Chip8::cycle() {
 // opcode description from here
 void Chip8::runOpcode() {
     opcode = static_cast<std::uint16_t>(memory[pc] << 8) | static_cast<std::uint16_t>(memory[pc+1]); // Reads opcode
-    pc += 2; //increments the program counter by 2 since it reads 16 bits per opcodes
+    if (pc + 2 < static_cast<int>(memory.size())) {
+            pc += 2; //increments the program counter by 2 since it reads 16 bits per opcodes
+    }
 
     std::uint16_t NNN = opcode & 0x0FFF;
     std::uint8_t NN = opcode & 0x00FF;
@@ -206,8 +209,62 @@ void Chip8::runOpcode() {
             }
             break;
         
-        //case 0xF000:
-            //switch (NN)
+        case 0xF000:
+            switch (NN) {
+                case 0x07:
+                    V[x] = delayTimer;
+                    break;
+
+                case 0x0A: {
+                    bool keyPressed = false;
+
+                    for (size_t j = 0; i < keypad.size(); ++j) {
+                        if (keypad[j]) {
+                            V[x] = j;
+                            keyPressed = true;
+                            break;
+                        }
+                    }
+                    if (!keyPressed) {
+                        pc -= 2;
+                    }
+                    
+                    break;
+                }
+
+                case 0x18:
+                    V[x] = soundTimer;
+                    break;
+
+                case 0x1E:
+                    i += V[x];
+                    break;
+                
+                case 0x29:
+                    i = FONT_START_ADDR + (5 * V[x]);
+                    break;
+                
+                case 0x33: {
+                    std::uint8_t value = V[x];
+
+                    memory[i + 2] = value % 10;
+                    value /= 10;
+
+                    memory[i + 1] = value % 10;
+                    value /= 10;
+
+                    memory[i] = value % 10;
+                    break;
+                }
+                
+                case 0x55: 
+                    for (std::uint8_t j = 0; j < x; ++j) {
+                        memory[i + j] = V[x];
+                    }
+                    break;
+                
+                    
+            }
         default:
             std::cout << "Unknown Opcode" << '\n';
             break;
