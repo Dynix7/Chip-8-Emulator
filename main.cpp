@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
+#include <random>
+
 #include "Chip8.hpp"
 
 #include <SDL3/SDL.h>
