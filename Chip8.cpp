@@ -45,6 +45,13 @@ bool Chip8::loadFont() {
 
 void Chip8::cycle() {
     runOpcode();
+
+    if (delayTimer > 0) {
+        delayTimer--;
+    }
+    if (soundTimer > 0) {
+        soundTimer--;
+    }
 }
 
 //http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1
@@ -139,7 +146,7 @@ void Chip8::runOpcode() {
                     break;
                 
                 case 0x0006:
-                    V[0xF] = (V[x] == 0x1); //Set Vx = Vx SHR 1.
+                    V[0xF] = (V[x] & 0x1); //Set Vx = Vx SHR 1.
                     V[x] >>= 1;
                     break;
                 
@@ -149,7 +156,7 @@ void Chip8::runOpcode() {
                     break;
                 
                 case 0x000E:
-                    V[0xF] = (V[x] & 0x1); //Set Vx = Vx SHL 1.
+                    V[0xF] = (V[x] & 0x80) >> 7; //Set Vx = Vx SHL 1.
                     V[x] <<= 1;
                     break;
             }

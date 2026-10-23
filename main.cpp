@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
-#include <random>
 
 #include "Chip8.hpp"
 
