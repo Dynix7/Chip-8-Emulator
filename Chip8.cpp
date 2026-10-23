@@ -61,7 +61,7 @@ void Chip8::runOpcode() {
     std::uint8_t x = (opcode >> 8) & 0x0F;
     std::uint8_t y = (opcode >> 4) & 0x0F;
 
-    std::cout << std::format("Opcode: {:04x}\n", opcode);
+    std::cout << std::format("Opcode: {:04x}\n PC: {}\n", opcode, pc);
     switch (opcode & 0xF000) {
         case 0x0000:
             if (opcode == 0x00E0) { // Clears Display
@@ -76,7 +76,7 @@ void Chip8::runOpcode() {
             break;
 
         case 0x2000:
-            stack[++sp] = pc; //Call subroutine at nnn.
+            stack[sp++] = pc; //Call subroutine at nnn.
             pc = NNN;
             break;
 
@@ -271,7 +271,7 @@ void Chip8::runOpcode() {
                   
             }
             break;
-            
+
         default:
             std::cout << "Unknown Opcode" << '\n';
             break;
