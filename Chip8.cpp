@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <format>
+#include <random>
 
 #define FONT_START_ADDR 0x50 // cuz standard is to start font from 0x50
 
@@ -169,7 +170,11 @@ void Chip8::runOpcode() {
             break;
         
         case 0xC000: // REMINDER: IMPLEMENT GETTING THE RANDOM BYTE
-            V[x] = 67 & NN; // Set Vx = random byte AND kk
+            static std::random_device device;
+            static std::mt19937 gen(device());
+            static std::uniform_int_distribution<int> distrib(0, 255); 
+            
+            V[x] = static_cast<std::uint8_t>(distrib(gen)) & NN; // Set Vx = random byte AND kk
             break;
         
         case 0xD000: {
@@ -187,7 +192,7 @@ void Chip8::runOpcode() {
 
                 for (int column = 0; column < 8; ++column) {
                     if (xPos + column >= VIDEO_WIDTH) continue;
-                    
+
                     std::uint8_t pixel = spriteRow & (0x80 >> column); //Bit mask per column
                     std::uint32_t& screenLoc = video[(yPos + row)*64 + (xPos + column)];
 
