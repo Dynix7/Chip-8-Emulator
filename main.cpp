@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
 
     SDL_SetTextureScaleMode(ChipVideo.texture, SDL_SCALEMODE_NEAREST); // Change sampling mode for the texture for clear pixels
 
-    if (chip8.loadProgram("tetris.ch8")) {
+    if (chip8.loadProgram("roms/chip8logo.ch8")) {
         std::cout << "Program Loaded" << '\n';
     } else {
         std::cerr << "Error Loading Program" << '\n';
